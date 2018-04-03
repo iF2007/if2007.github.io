@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<link href="/plugins/prettify/prettify.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
 <head>
     
 
@@ -194,7 +196,16 @@
     
 </div>
 
-        <footer class="footer">
+        <script src="/js/prettify.js"></script> 
+<script type="text/javascript">
+$(document).ready(function(){
+ $('pre').addClass('prettyprint linenums');
+   prettyPrint();
+ })
+</script>
+
+
+<footer class="footer">
     <div class="bottom">
         
 
@@ -215,7 +226,13 @@
 </footer>
 
     </main>
-    <div class="mask" id="mask"></div>
+    <script src="/plugins/prettify/prettify.js"></script>
+<script type="text/javascript">
+$(window).load(function(){
+$('pre').addClass('prettyprint').attr('style', 'overflow:auto;');
+ prettyPrint();
+
+<div class="mask" id="mask"></div>
 <a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
 
