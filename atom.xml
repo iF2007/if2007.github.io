@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Yet Another Blog</title>
   
-  <subtitle>Sub</subtitle>
+  
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://if2007.github.io/"/>
