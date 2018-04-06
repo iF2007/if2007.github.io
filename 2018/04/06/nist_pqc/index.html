@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://if2007.github.io/2018/04/06/nist_pqc/nist_pqc_asiacrypt_17_slide.png">
 <meta property="og:image" content="https://if2007.github.io/2018/04/06/nist_pqc/dke_nist_website.png">
 <meta property="og:image" content="https://if2007.github.io/2018/04/06/nist_pqc/dke_flow.png">
-<meta property="og:updated_time" content="2018-04-06T06:48:36.394Z">
+<meta property="og:updated_time" content="2018-04-06T11:50:49.782Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NIST 后量子密码标准征集提案 - Ding Key Exchange">
 <meta name="twitter:description" content="对提交至 NIST 的后量子密码标准征集提案 - 基于 RLWE 问题的格密钥交换协议 &quot;Ding Key Exchange&quot; 的简单介绍">
@@ -198,7 +198,7 @@
         <div class="post-content" id="post-content" itemprop="postContent">
             <h1 id="后量子密码-Post-quantum-Cryptography-及背景"><a href="#后量子密码-Post-quantum-Cryptography-及背景" class="headerlink" title="后量子密码 (Post-quantum Cryptography) 及背景"></a>后量子密码 (Post-quantum Cryptography) 及背景</h1><p>1994 年，Peter Shor 提出了著名的量子算法。Shor 的量子算法可以实现：当足够大的量子计算机存在时，一些数论中的困难问题可以被有效解决，例如：离散对数问题（及其椭圆曲线版本），并可以被用于分解大整数。注意到离散对数问题（及其椭圆曲线版本）和大整数分解问题是目前广泛应用的公钥密码学算法（<a href="https://zh.wikipedia.org/wiki/%E8%BF%AA%E8%8F%B2-%E8%B5%AB%E7%88%BE%E6%9B%BC%E5%AF%86%E9%91%B0%E4%BA%A4%E6%8F%9B" target="_blank" rel="noopener">Diffie-Hellman 密钥交换协议</a>、<a href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">RSA</a>、<a href="https://zh.wikipedia.org/wiki/%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E5%AF%86%E7%A0%81%E5%AD%A6" target="_blank" rel="noopener">椭圆曲线 (ECC)</a> 等）的困难性的基础。在没有量子计算机和对应的算法时，现有的经典公钥密码算法配合较为合适的参数（例如 2048 比特的 RSA）可以被认为在一定时间内是安全的。但是，一旦大型的量子计算机成功建造，Shor 的算法被认为可以快速且完全攻破大多数目前使用的公钥密码算法，即使参数被显著增大 $^{[1]}$。</p>
 <p><em>[1] 这里的“参数被显著增大”指的是在计算和通信开销可接受范围内的情况。当参数被“急剧增大”时，RSA 算法被认为可以“抵抗”量子计算机攻击。但此时，公钥的尺寸已经接近几百 M 甚至大于 1 GB。</em></p>
-<p>在真实世界中，广泛应用于各类安全应用、协议中的密码学原语包括且不仅限于：公钥加密、数字签名、密钥交换等。基于所有的互联网服务都依赖于密码学算法，包括且不仅限于 TLS、HTTPS、SSH、邮件、电子商务、移动支付、数字货币等。所有网络、软件、系统、应用安全等所有现代互联网的应用都将受到严峻的挑战。因此，这些应用、服务的安全都将受到严峻的挑战。</p>
+<p>在真实世界中，广泛应用于各类安全应用、协议中的密码学原语包括且不仅限于：公钥加密、数字签名、密钥交换等。基于所有的互联网服务都依赖于密码学算法，包括且不仅限于 TLS、HTTPS、SSH、邮件、电子商务、移动支付、数字货币等。所有网络、软件、系统、应用安全等所有现代互联网的应用都将受到严峻的挑战。</p>
 <p>后量子密码学 (Post-quantum Cryptography) 的任务是构造可以抵抗经典和量子计算机攻击的新的密码学算法，以应对量子计算机对于密码学的威胁。主要的后量子密码学实现技术有：基于格 (Lattice-based)、基于哈希 (Hash-based) 、基于编码 (Code-based) 、基于多变量 (Multivariate-based) 、基于格 (Lattice-based) 等。这四种方法各有其利弊。目前认为，在上述四种实现后量子密码算法的技术中，基于格的密码算法可以实现最强的安全性、最小的总通信开销、最快的计算速度和最多样化的密码算法设计。</p>
 <p>截至目前，Google 已对后量子密码学算法的实用性进行<a href="https://security.googleblog.com/2016/07/experimenting-with-post-quantum.html" target="_blank" rel="noopener">实际测试</a>。Google 将后量子密钥交换协议应用于 TLS 中，并在 Google Chrome 浏览器的 Canary 分支和部分 Google Play 服务器上成功进行了测试。</p>
 <p>您可以参考后量子密码学的 <a href="https://en.wikipedia.org/wiki/Post-quantum_cryptography" target="_blank" rel="noopener">Wikipedia 页面</a>、<a href="https://www.nature.com/articles/nature23461" target="_blank" rel="noopener">Nature 上的文章</a>或<a href="https://www.springer.com/us/book/9783540887010" target="_blank" rel="noopener">较为系统的介绍后量子密码学的书</a>等资源对后量子密码学进行更多的了解。您还可以参考这两篇较为详细的后量子密码学中文介绍：<a href="http://www.knowfar.org.cn/html/zhanlue/201612/22/641.htm" target="_blank" rel="noopener">“从量子计算到量子安全”</a>和<a href="http://www.knowfar.org.cn/html/zhanlue/201701/13/657.htm" target="_blank" rel="noopener">“后量子密码技术发展分析”</a>。</p>
@@ -262,7 +262,7 @@
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-04-06T06:48:36.394Z" itemprop="dateUpdated">2018-04-06 14:48:36</time>
+            <time datetime="2018-04-06T11:50:49.782Z" itemprop="dateUpdated">2018-04-06 19:50:49</time>
         </li>  
     </ul>
 </span>
