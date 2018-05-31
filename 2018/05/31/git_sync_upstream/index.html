@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+
+  <link rel="stylesheet" href="/css/style.css">
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="true/2018/05/31/git_sync_upstream/">
+    
+    
+    <title>Git 克隆 fork 并同步原仓库更新 | Yet Another Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Git">
+    <meta name="description" content="本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。  克隆远程仓库  git clone git@xxx/openssl.git  查看所有分支  git branch -a  切换到某个分支  git checkout xxx  查看远程状态  git remote -v  添加远程的仓库。这里添加的仓库就是你期望">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 克隆 fork 并同步原仓库更新">
+<meta property="og:url" content="https://if2007.github.io/2018/05/31/git_sync_upstream/index.html">
+<meta property="og:site_name" content="Yet Another Blog">
+<meta property="og:description" content="本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。  克隆远程仓库  git clone git@xxx/openssl.git  查看所有分支  git branch -a  切换到某个分支  git checkout xxx  查看远程状态  git remote -v  添加远程的仓库。这里添加的仓库就是你期望">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-05-31T12:08:27.223Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git 克隆 fork 并同步原仓库更新">
+<meta name="twitter:description" content="本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。  克隆远程仓库  git clone git@xxx/openssl.git  查看所有分支  git branch -a  切换到某个分支  git checkout xxx  查看远程状态  git remote -v  添加远程的仓库。这里添加的仓库就是你期望">
+    
+        <link rel="alternate" type="application/atom+xml" title="Yet Another Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Xinwei Gao</h5>
+          <a href="mailto:xinwei.gao.7@yandex.com" title="xinwei.gao.7@yandex.com" class="mail">xinwei.gao.7@yandex.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/2018/04/06/nist_pqc/" target="_blank" >
+                <i class="icon icon-lg icon-codepen"></i>
+                NIST 后量子密码标准提案
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info-circle"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Git 克隆 fork 并同步原仓库更新</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Git 克隆 fork 并同步原仓库更新</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-05-30T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-05-31
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Git/">Git</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-git_sync_upstream"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Git 克隆 fork 并同步原仓库更新</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-05-31 00:00:00" datetime="2018-05-30T16:00:00.000Z"  itemprop="datePublished">2018-05-31</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Git/">Git</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。</p>
+<ol>
+<li>克隆远程仓库</li>
+</ol>
+<p><code>git clone git@xxx/openssl.git</code></p>
+<ol start="2">
+<li>查看所有分支</li>
+</ol>
+<p><code>git branch -a</code></p>
+<ol start="3">
+<li>切换到某个分支</li>
+</ol>
+<p><code>git checkout xxx</code></p>
+<ol start="4">
+<li>查看远程状态</li>
+</ol>
+<p><code>git remote -v</code></p>
+<ol start="5">
+<li>添加远程的仓库。这里添加的仓库就是你期望从哪个仓库更新他们新提交的代码并合并到你的分支里的那个</li>
+</ol>
+<p><code>git remote add upstream https://......git</code></p>
+<ol start="6">
+<li>确认是否配置成功</li>
+</ol>
+<p><code>git remote -v</code></p>
+<p>此时应该有 4 行</p>
+<ol start="7">
+<li>从上游仓库获取新的内容，同步到本地</li>
+</ol>
+<p><code>git fetch upstream</code></p>
+<p>新的内容会被存储在一个本地 upstream/master 中</p>
+<ol start="8">
+<li>切换到本地主分支 (optional)</li>
+</ol>
+<p><code>git checkout master</code></p>
+<ol start="9">
+<li>将 upstream/master 分支合并到 master 上。此时，已经完成了同步，且不会丢掉本地修改的代码</li>
+</ol>
+<p><code>git merge upstream/master</code></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    About this post:<br>
+
+    <ul>
+        <li class="post-copyright-link">
+            <strong>Title: </strong>
+            <a href=>Git 克隆 fork 并同步原仓库更新</a>
+        </li>
+
+        <li class="post-copyright-link">
+            <strong>URL: </strong>
+            <a href="/2018/05/31/git_sync_upstream/">https://if2007.github.io/2018/05/31/git_sync_upstream/</a>
+        </li>
+
+        <li class="post-copyright-date">
+            <strong>Last updated: </strong>
+            <time datetime="2018-05-31T12:08:27.223Z" itemprop="dateUpdated">2018-05-31 20:08:27</time>
+        </li>  
+    </ul>
+</span>
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://if2007.github.io">
+            <img src="/img/avatar.jpg" alt="Xinwei Gao">
+            Xinwei Gao
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆 fork 并同步原仓库更新》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆 fork 并同步原仓库更新》 — Yet Another Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git 克隆 fork 并同步原仓库更新》 — Yet Another Blog&url=https://if2007.github.io/2018/05/31/git_sync_upstream/&via=https://if2007.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/06/nist_pqc/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">NIST 后量子密码标准征集提案 - Ding Key Exchange</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'true' == 'true',
+            appId: "wrCCJaL0YD6S2QfVG0wgG921-gzGzoHsz",
+            appKey: "urnkVpsJxqsqHy1yOWy4ThmH",
+            avatar: "mm",
+            placeholder: "Just go go",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+
+
+<footer class="footer">
+    <div class="bottom">
+        
+
+        <p>
+            <span>Xinwei Gao &copy; 2018</span>
+
+            <span>CC-BY-NC 4.0</span>
+
+            <span>
+                
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">Indigo</a>
+            </span>
+
+
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"> <i class="icon icon-lg icon-rss"></i></a></span>
+            
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆 fork 并同步原仓库更新》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆 fork 并同步原仓库更新》 — Yet Another Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git 克隆 fork 并同步原仓库更新》 — Yet Another Blog&url=https://if2007.github.io/2018/05/31/git_sync_upstream/&via=https://if2007.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aS3KEMAxF0d7/psk0qQ5wn2y6qqXLKJWA8WGg6OPXC1/Hr+vsr+93Xt9PVtt8yZAh42sZx+XF70lXfl+ffJTT98qQIWMAg4RREjRJ8CVP8b3JkCFDRo1EksIaWIYMGTLSgJs+xZNIGTJkyKgVseTFvGHHA+7mWlyGDBlfyOAB8fM/PzLfkCFDxlcxjvDijbbrILs+TvizjgwZMlozeIC73nqt0baS9smQIWMOoxZYefrIN5T+Bn0hGTJkNGLwdlh6qIKE7NpY9J+AK0OGjKYMsgneCCPDAz74jAcAMmTIaM0IkjBcjpJ2W3rULBgbyJAhoxFjZbnaJ+DFatCGkyFDxhjGSrOMHxpLD1igFWTIkDGGsTIq4E/tKpJPR5gyZMhoykhHiWkwTdPQNATLkCGjN2PXdveWvsXjFzJkyGjK4MVnXFjiwWQNfJoaypAhoymDF5+1wxZpghiPFmTIkDGGUSsja2liWtDeFLoyZMhozdi7rbTRz0M2CtMyZMgYw0iPVvBUrzbmDJJRGTJkDGDUmv68MffcuFSGDBkzGbuCL4fxxPGmiJUhQ0Y7xhFePF1bHycE75UhQ0ZrRi3YXSd2pMRdWS39xyBDhowejDTI1jZKyl2ePsqQIWMmgx9r4I2zJ4adp0gZMmTICI9c8GI1bd7dVOQyZMiQEW6odpyitr4MGTImMPixrZtislSUrhzjkCFDxgQGLx15SVlLN9PCVYYMGQMYP9Y3k2EFmUZFAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
