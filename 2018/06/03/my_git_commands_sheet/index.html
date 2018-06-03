@@ -14,28 +14,28 @@
     <meta charset="utf-8">
     
     
-    <link rel="canonical" href="true/2018/05/31/git_sync_upstream/">
+    <link rel="canonical" href="true/2018/06/03/my_git_commands_sheet/">
     
     
-    <title>Git 克隆一个 fork 分支并同步原仓库的更新 | Yet Another Blog</title>
+    <title>常用的 Git 命令备忘 | Yet Another Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Git">
-    <meta name="description" content="本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。  克隆远程仓库  git clone git@xxx/openssl.git  查看所有分支  git branch -a  切换到某个分支  git checkout xxx  查看远程状态  git remote -v  添加远程的仓库。这里添加的仓库就是你期望">
+    <meta name="description" content="本文记录了自己常用的 Git 命令/备忘以便日后查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git 克隆一个 fork 分支并同步原仓库的更新">
-<meta property="og:url" content="https://if2007.github.io/2018/05/31/git_sync_upstream/index.html">
+<meta property="og:title" content="常用的 Git 命令备忘">
+<meta property="og:url" content="https://if2007.github.io/2018/06/03/my_git_commands_sheet/index.html">
 <meta property="og:site_name" content="Yet Another Blog">
-<meta property="og:description" content="本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。  克隆远程仓库  git clone git@xxx/openssl.git  查看所有分支  git branch -a  切换到某个分支  git checkout xxx  查看远程状态  git remote -v  添加远程的仓库。这里添加的仓库就是你期望">
+<meta property="og:description" content="本文记录了自己常用的 Git 命令/备忘以便日后查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-01T03:48:33.449Z">
+<meta property="og:updated_time" content="2018-06-03T04:53:11.001Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Git 克隆一个 fork 分支并同步原仓库的更新">
-<meta name="twitter:description" content="本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。  克隆远程仓库  git clone git@xxx/openssl.git  查看所有分支  git branch -a  切换到某个分支  git checkout xxx  查看远程状态  git remote -v  添加远程的仓库。这里添加的仓库就是你期望">
+<meta name="twitter:title" content="常用的 Git 命令备忘">
+<meta name="twitter:description" content="本文记录了自己常用的 Git 命令/备忘以便日后查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
     
         <link rel="alternate" type="application/atom+xml" title="Yet Another Blog" href="/atom.xml">
     
@@ -123,7 +123,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Git 克隆一个 fork 分支并同步原仓库的更新</div>
+        <div class="flex-col header-title ellipsis">常用的 Git 命令备忘</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -145,11 +145,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">Git 克隆一个 fork 分支并同步原仓库的更新</h1>
+        <h1 class="title">常用的 Git 命令备忘</h1>
         <h5 class="subtitle">
             
-                <time datetime="2018-05-30T16:00:00.000Z" itemprop="datePublished" class="page-time">
-  2018-05-31
+                <time datetime="2018-06-02T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-06-03
 </time>
 
 
@@ -168,13 +168,13 @@
 <div class="container body-wrap">
     
 
-<article id="post-git_sync_upstream"
+<article id="post-my_git_commands_sheet"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">Git 克隆一个 fork 分支并同步原仓库的更新</h1>
+        <h1 class="post-card-title">常用的 Git 命令备忘</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-05-31 00:00:00" datetime="2018-05-30T16:00:00.000Z"  itemprop="datePublished">2018-05-31</time>
+            <time class="post-time" title="2018-06-03 00:00:00" datetime="2018-06-02T16:00:00.000Z"  itemprop="datePublished">2018-06-03</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Git/">Git</a></li></ul>
@@ -185,49 +185,23 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。</p>
+            <p>本文记录了自己常用的 Git 命令/备忘以便日后查找</p>
 <ol>
-<li>克隆远程仓库</li>
+<li>一行查看 Git commit 历史：<code>git log --pretty=oneline</code></li>
+<li>彻底退回某一次 Commit（源代码回退）：<code>git reset --hard [commit_id]</code></li>
+<li>不彻底回退某一次 Commit（commit 信息回退，代码不变）：<code>git reset --soft [commit_id]</code></li>
+<li>切换至某一分支：<code>git checkout [branch_name]</code></li>
+<li>查看所有分支名称：<code>git branch -a</code></li>
+<li>添加上游：<code>git remote add upstream [git@...../xxx.git]</code></li>
+<li>从上游获取更新：<code>git fetch upstream</code></li>
+<li>将本地的更新提交至远程的某一分支：<code></code></li>
+<li>查看以前的操作：<code>git reflog</code></li>
+<li>移除上游：<code>git remote rm [upstream_name]</code></li>
+<li>提交本地的 test 分支作为远程的 test 分支：<code>git push origin test:test</code></li>
+<li>Git 不会主动追踪变更的文件，需要 <code>git add</code> 才能被追踪到</li>
+<li>将 Add 和 Commit 合并为一步：<code>git commit -am [Commit msg]</code></li>
+<li><a href="https://if2007.github.io/2018/05/31/git_sync_upstream/">Git 克隆一个 fork 分支并同步原仓库的更新</a></li>
 </ol>
-<p><code>git clone git@xxx/openssl.git</code></p>
-<ol start="2">
-<li>查看所有分支</li>
-</ol>
-<p><code>git branch -a</code></p>
-<ol start="3">
-<li>切换到某个分支</li>
-</ol>
-<p><code>git checkout xxx</code></p>
-<ol start="4">
-<li>查看远程状态</li>
-</ol>
-<p><code>git remote -v</code></p>
-<ol start="5">
-<li>添加远程的仓库。这里添加的仓库就是你期望从哪个仓库更新他们新提交的代码并合并到你的分支里的那个</li>
-</ol>
-<p><code>git remote add upstream https://......git</code></p>
-<ol start="6">
-<li>确认是否配置成功</li>
-</ol>
-<p><code>git remote -v</code></p>
-<p>此时应该有 4 行</p>
-<ol start="7">
-<li>从上游仓库获取新的内容，同步到本地</li>
-</ol>
-<p><code>git fetch upstream</code></p>
-<p>新的内容会被存储在一个本地 upstream/master 中</p>
-<blockquote>
-<p><a href="https://git-scm.com/book/zh/v1/Git-%E5%9F%BA%E7%A1%80-%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8" target="_blank" rel="noopener">Git 基础 - 远程仓库的使用</a>: <code>git fetch origin</code> 会抓取从你上次克隆以来别人上传到此远程仓库中的所有更新（或是上次 fetch 以来别人提交的更新）。有一点很重要，需要记住，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。</p>
-</blockquote>
-<ol start="8">
-<li>切换到本地主分支 (optional)</li>
-</ol>
-<p><code>git checkout master</code></p>
-<ol start="9">
-<li>将 upstream/master 分支合并到 master 上。此时，已经完成了同步，且不会丢掉本地修改的代码</li>
-</ol>
-<p><code>git merge upstream/master</code></p>
-<p><em>感谢：<a href="https://www.zhihu.com/question/28676261/answer/44606041" target="_blank" rel="noopener">https://www.zhihu.com/question/28676261/answer/44606041</a></em></p>
 
         </div>
 
@@ -241,17 +215,17 @@
     <ul>
         <li class="post-copyright-link">
             <strong>Title: </strong>
-            <a href=>Git 克隆一个 fork 分支并同步原仓库的更新</a>
+            <a href=>常用的 Git 命令备忘</a>
         </li>
 
         <li class="post-copyright-link">
             <strong>URL: </strong>
-            <a href="/2018/05/31/git_sync_upstream/">https://if2007.github.io/2018/05/31/git_sync_upstream/</a>
+            <a href="/2018/06/03/my_git_commands_sheet/">https://if2007.github.io/2018/06/03/my_git_commands_sheet/</a>
         </li>
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-01T03:48:33.449Z" itemprop="dateUpdated">2018-06-01 11:48:33</time>
+            <time datetime="2018-06-03T04:53:11.001Z" itemprop="dateUpdated">2018-06-03 12:53:11</time>
         </li>  
     </ul>
 </span>
@@ -282,7 +256,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆一个 fork 分支并同步原仓库的更新》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/&title=《常用的 Git 命令备忘》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -292,22 +266,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆一个 fork 分支并同步原仓库的更新》 — Yet Another Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/&title=《常用的 Git 命令备忘》 — Yet Another Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/03/my_git_commands_sheet/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git 克隆一个 fork 分支并同步原仓库的更新》 — Yet Another Blog&url=https://if2007.github.io/2018/05/31/git_sync_upstream/&via=https://if2007.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《常用的 Git 命令备忘》 — Yet Another Blog&url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/&via=https://if2007.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -327,21 +301,14 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2018/06/03/my_git_commands_sheet/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">常用的 Git 命令备忘</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/05/31/openssl_cert_client_server/" id="post-next" class="post-nav-link">
+      <a href="/2018/05/31/git_sync_upstream/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">OpenSSL 生成证书并用 s_client/s_server 测试链接的命令</h4>
+        <h4 class="title">Git 克隆一个 fork 分支并同步原仓库的更新</h4>
       </a>
     </div>
   
@@ -430,7 +397,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆一个 fork 分支并同步原仓库的更新》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/&title=《常用的 Git 命令备忘》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -440,22 +407,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/05/31/git_sync_upstream/&title=《Git 克隆一个 fork 分支并同步原仓库的更新》 — Yet Another Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/&title=《常用的 Git 命令备忘》 — Yet Another Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/03/my_git_commands_sheet/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Git 克隆一个 fork 分支并同步原仓库的更新》 — Yet Another Blog&url=https://if2007.github.io/2018/05/31/git_sync_upstream/&via=https://if2007.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《常用的 Git 命令备忘》 — Yet Another Blog&url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/&via=https://if2007.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/05/31/git_sync_upstream/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/03/my_git_commands_sheet/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -466,7 +433,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aS3KEMAxF0d7/psk0qQ5wn2y6qqXLKJWA8WGg6OPXC1/Hr+vsr+93Xt9PVtt8yZAh42sZx+XF70lXfl+ffJTT98qQIWMAg4RREjRJ8CVP8b3JkCFDRo1EksIaWIYMGTLSgJs+xZNIGTJkyKgVseTFvGHHA+7mWlyGDBlfyOAB8fM/PzLfkCFDxlcxjvDijbbrILs+TvizjgwZMlozeIC73nqt0baS9smQIWMOoxZYefrIN5T+Bn0hGTJkNGLwdlh6qIKE7NpY9J+AK0OGjKYMsgneCCPDAz74jAcAMmTIaM0IkjBcjpJ2W3rULBgbyJAhoxFjZbnaJ+DFatCGkyFDxhjGSrOMHxpLD1igFWTIkDGGsTIq4E/tKpJPR5gyZMhoykhHiWkwTdPQNATLkCGjN2PXdveWvsXjFzJkyGjK4MVnXFjiwWQNfJoaypAhoymDF5+1wxZpghiPFmTIkDGGUSsja2liWtDeFLoyZMhozdi7rbTRz0M2CtMyZMgYw0iPVvBUrzbmDJJRGTJkDGDUmv68MffcuFSGDBkzGbuCL4fxxPGmiJUhQ0Y7xhFePF1bHycE75UhQ0ZrRi3YXSd2pMRdWS39xyBDhowejDTI1jZKyl2ePsqQIWMmgx9r4I2zJ4adp0gZMmTICI9c8GI1bd7dVOQyZMiQEW6odpyitr4MGTImMPixrZtislSUrhzjkCFDxgQGLx15SVlLN9PCVYYMGQMYP9Y3k2EFmUZFAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNUlEQVR42u3aQW7DMAwF0dz/0irQbRp5PukWNTVaBUUi87kAQYp6vfBa34t/8319+k7nWfGSIUPGYxlru963JkGQPfe/5bHJkCHjHMY+8ZHUmb6C9LcXMcuQIUNGuDUpB9PPMmTIkNFJuGkrmyZoGTJkyOAlGjlEI41umohv7sVlyJDxQEY6GPjLz78435AhQ8ZDGCtcpEGtjRZWY8mQIWM2Yx8WKePSAo6XlaRwvOhrZciQMYiRFoX7RMmbWH6Ed0PNK0OGjIczyDFW7ToXHxWkIwF0aihDhozRDBJQJ03XCkoZMmScyUibTD7mTNtR8sTgtogMGTIGMVISLyL5RY3a62j9Z2TIkPFYBi/10pOuGpvfqZAhQ8ZsRi3JdhJuJ4F+3FOGDBmjGbVAebjp0RsJXYYMGSczOumSp2CeUuOxhAwZMkYz0maylhb5kJL8Bc1jZciQMYJBUmdaJtYufqUDAxkyZJzD6NxYSFvZ2qA0jUeGDBmzGXddBQsazvAqBipbZciQMY7Bg6hdhqgNKePyVIYMGQcwOsGlFy9qQV88S4YMGaMZaWOZXqqoJeU0HcuQIWM2Y4UrHXamo03y1n/YU4YMGaMZfPFj+v50Ih1zypAh4wQGT7K18pG3u632WIYMGQcw+NZkSNlpVmtJX4YMGTLSozQSCn9l6PXJkCFDRnhYxgs+EiIqHGXIkHEAozYMSI/S+iPSi0msDBkyhjJqDSQZNNauaPBUfsN8Q4YMGf+d8QUf4Df1G88PiQAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
