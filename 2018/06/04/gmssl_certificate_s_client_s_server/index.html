@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+
+  <link rel="stylesheet" href="/css/style.css">
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="true/2018/06/04/gmssl_certificate_s_client_s_server/">
+    
+    
+    <title>使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试 | Yet Another Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="GmSSL">
+    <meta name="description" content="本文参考 GmSSL GitHub 的 Issue #8 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用gmssl命令生成 CA 证书、客户端证书、服务器端证书，并用s_client和s_server命令进行交互测试的过程。 准备工作与 GmSSL GitHub 的 Issue #8 类似，首先执行下面的命令： 12345mkdir demoCAcd demoCA/mkdi">
+<meta name="keywords" content="GmSSL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试">
+<meta property="og:url" content="https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/index.html">
+<meta property="og:site_name" content="Yet Another Blog">
+<meta property="og:description" content="本文参考 GmSSL GitHub 的 Issue #8 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用gmssl命令生成 CA 证书、客户端证书、服务器端证书，并用s_client和s_server命令进行交互测试的过程。 准备工作与 GmSSL GitHub 的 Issue #8 类似，首先执行下面的命令： 12345mkdir demoCAcd demoCA/mkdi">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-06-04T08:04:04.057Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试">
+<meta name="twitter:description" content="本文参考 GmSSL GitHub 的 Issue #8 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用gmssl命令生成 CA 证书、客户端证书、服务器端证书，并用s_client和s_server命令进行交互测试的过程。 准备工作与 GmSSL GitHub 的 Issue #8 类似，首先执行下面的命令： 12345mkdir demoCAcd demoCA/mkdi">
+    
+        <link rel="alternate" type="application/atom+xml" title="Yet Another Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Xinwei Gao</h5>
+          <a href="mailto:xinwei.gao.7@yandex.com" title="xinwei.gao.7@yandex.com" class="mail">xinwei.gao.7@yandex.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/2018/04/06/nist_pqc/" target="_blank" >
+                <i class="icon icon-lg icon-codepen"></i>
+                NIST 后量子密码标准提案
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info-circle"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-03T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2018-06-04
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/GmSSL/">GmSSL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备工作"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备工作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生成一系列证书"><span class="post-toc-number">2.</span> <span class="post-toc-text">生成一系列证书</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CA-自签名证书"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CA 自签名证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#生成客户端和服务器端证书"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">生成客户端和服务器端证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用-CA-证书对客户端和服务器端-CSR-进行证书签发"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">用 CA 证书对客户端和服务器端 CSR 进行证书签发</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#s-client-和-s-server-命令行测试"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">s_client 和 s_server 命令行测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-gmssl_certificate_s_client_s_server"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-04 00:00:00" datetime="2018-06-03T16:00:00.000Z"  itemprop="datePublished">2018-06-04</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/GmSSL/">GmSSL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文参考 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">GmSSL GitHub 的 Issue #8</a> 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用<code>gmssl</code>命令生成 CA 证书、客户端证书、服务器端证书，并用<code>s_client</code>和<code>s_server</code>命令进行交互测试的过程。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>与 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">GmSSL GitHub 的 Issue #8</a> 类似，首先执行下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir demoCA</span><br><span class="line">cd demoCA/</span><br><span class="line">mkdir certs crl newcerts private</span><br><span class="line">touch index.txt</span><br><span class="line">echo &quot;01&quot; &gt; serial</span><br></pre></td></tr></table></figure>
+<h2 id="生成一系列证书"><a href="#生成一系列证书" class="headerlink" title="生成一系列证书"></a>生成一系列证书</h2><h3 id="CA-自签名证书"><a href="#CA-自签名证书" class="headerlink" title="CA 自签名证书"></a>CA 自签名证书</h3><p>利用<code>gmssl</code>命令行工具，生成自签名的 CA 证书和 key，并进行自签名。这里，我们的证书使用 SM2 椭圆曲线算法和 SM3 哈希算法生成的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">../gmssl  ecparam -genkey -name sm2p256v1 -out cakey.pem    // 生成 key</span><br><span class="line">../gmssl  req -new -sm3 -key cakey.pem -out cacsr.pem       // 生成 CSR</span><br><span class="line">../gmssl req -x509 -sm3 -days 3650 -key cakey.pem -in cacsr.pem -out cacert.pem     // 自签名</span><br></pre></td></tr></table></figure>
+<p>用<code>../gmssl x509 -in cacert.pem -text</code>查看一下生成的 CA 证书。</p>
+<p>将 cakey.pem 文件移动至 private 目录下，cakey.pem 文件仍然在 demoCA 目录下。</p>
+<h3 id="生成客户端和服务器端证书"><a href="#生成客户端和服务器端证书" class="headerlink" title="生成客户端和服务器端证书"></a>生成客户端和服务器端证书</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out client_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key client_key.pem -out client_csr.pem</span><br><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out server_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key server_key.pem -out server_csr.pem</span><br></pre></td></tr></table></figure>
+<h3 id="用-CA-证书对客户端和服务器端-CSR-进行证书签发"><a href="#用-CA-证书对客户端和服务器端-CSR-进行证书签发" class="headerlink" title="用 CA 证书对客户端和服务器端 CSR 进行证书签发"></a>用 CA 证书对客户端和服务器端 CSR 进行证书签发</h3><p>注意，这里是填坑最大的地方。按以前的步骤操作，总会出现各种各样奇怪的错误。在进行无数的搜索和测试后，我找到了以下可以 work 的方法：</p>
+<p><code>./gmssl ca -md sm3 -in client_csr.pem -out client_cert.pem -days 3650 -policy policy_anything</code></p>
+<p>类似的，对服务器端：<code>./gmssl ca -md sm3 -in server_csr.pem -out server_cert.pem -days 3650 -policy policy_anything</code>。</p>
+<p>最重要的就是<strong>-policy policy_anything</strong>部分。之前有人说可以修改<code>openssl.cnf</code>文件中的<code>string_mask</code>为<code>pkix</code>值。在 commit 值为 <a href="https://github.com/guanzhi/GmSSL/tree/0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f" target="_blank" rel="noopener">0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f</a> 的 GmSSL 库中（2018.5.27）无法 work。</p>
+<h3 id="s-client-和-s-server-命令行测试"><a href="#s-client-和-s-server-命令行测试" class="headerlink" title="s_client 和 s_server 命令行测试"></a>s_client 和 s_server 命令行测试</h3><p>与 OpenSSL 的命令行一致，可以用以下 GmSSL 命令行进行客户端和服务器端的模拟测试：</p>
+<p><code>./gmssl s_server -key server_key.pem -cert server_cert.pem -accept 4333</code><br><code>./gmssl s_client -key client_key.pem -cert client_cert.pem -connect localhost:4333</code></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>目前会出现以下错误：</p>
+<p>服务器端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$./gmssl s_server -key server_key.pem -cert server_cert.pem -accept 4333</span><br><span class="line">Using default temp DH parameters</span><br><span class="line">[GMTLS_DEBUG] set sm2 encryption certificate</span><br><span class="line">[GMTLS_DEBUG] set sm2 decryption private key</span><br><span class="line">ACCEPT</span><br><span class="line">ERROR</span><br><span class="line">139670675003136:error:1417A0C1:SSL routines:tls_post_process_client_hello:no shared cipher:ssl/statem/statem_srvr.c:1502:</span><br><span class="line">shutting down SSL</span><br><span class="line">CONNECTION CLOSED</span><br></pre></td></tr></table></figure>
+<p>客户端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$./gmssl s_client -key client_key.pem -cert client_cert.pem -connect localhost:4333</span><br><span class="line">[GMTLS_DEBUG] set sm2 encryption certificate</span><br><span class="line">[GMTLS_DEBUG] set sm2 decryption private key</span><br><span class="line">CONNECTED(00000003)</span><br><span class="line">139947870295808:error:14094410:SSL routines:ssl3_read_bytes:sslv3 alert handshake failure:ssl/record/rec_layer_s3.c:1385:SSL alert number 40</span><br><span class="line">---</span><br><span class="line">no peer certificate available</span><br><span class="line">---</span><br><span class="line">No client certificate CA names sent</span><br><span class="line">---</span><br><span class="line">SSL handshake has read 7 bytes and written 62 bytes</span><br><span class="line">Verification: OK</span><br><span class="line">---</span><br><span class="line">New, (NONE), Cipher is (NONE)</span><br><span class="line">Secure Renegotiation IS NOT supported</span><br><span class="line">Compression: NONE</span><br><span class="line">Expansion: NONE</span><br><span class="line">No ALPN negotiated</span><br><span class="line">SSL-Session:</span><br><span class="line">    Protocol  : GMTLSv1.1</span><br><span class="line">    Cipher    : 0000</span><br><span class="line">    Session-ID:</span><br><span class="line">    Session-ID-ctx:</span><br><span class="line">    Master-Key:</span><br><span class="line">    PSK identity: None</span><br><span class="line">    PSK identity hint: None</span><br><span class="line">    SRP username: None</span><br><span class="line">    Start Time: 1528099250</span><br><span class="line">    Timeout   : 7200 (sec)</span><br><span class="line">    Verify return code: 0 (ok)</span><br><span class="line">    Extended master secret: no</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>目前错误原因未知。</p>
+<p>希望本文能对你有所帮助，也希望能一起讨论存在的问题。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    About this post:<br>
+
+    <ul>
+        <li class="post-copyright-link">
+            <strong>Title: </strong>
+            <a href=>使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试</a>
+        </li>
+
+        <li class="post-copyright-link">
+            <strong>URL: </strong>
+            <a href="/2018/06/04/gmssl_certificate_s_client_s_server/">https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/</a>
+        </li>
+
+        <li class="post-copyright-date">
+            <strong>Last updated: </strong>
+            <time datetime="2018-06-04T08:04:04.057Z" itemprop="dateUpdated">2018-06-04 16:04:04</time>
+        </li>  
+    </ul>
+</span>
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://if2007.github.io">
+            <img src="/img/avatar.jpg" alt="Xinwei Gao">
+            Xinwei Gao
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GmSSL/">GmSSL</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试》 — Yet Another Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试》 — Yet Another Blog&url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&via=https://if2007.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/03/my_git_commands_sheet/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">常用的 Git 命令备忘</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'true' == 'true',
+            appId: "wrCCJaL0YD6S2QfVG0wgG921-gzGzoHsz",
+            appKey: "urnkVpsJxqsqHy1yOWy4ThmH",
+            avatar: "mm",
+            placeholder: "Just go go",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+
+
+<footer class="footer">
+    <div class="bottom">
+        
+
+        <p>
+            <span>Xinwei Gao &copy; 2018</span>
+
+            <span>CC-BY-NC 4.0</span>
+
+            <span>
+                
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">Indigo</a>
+            </span>
+
+
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"> <i class="icon icon-lg icon-rss"></i></a></span>
+            
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试》 — Yet Another Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试》 — Yet Another Blog&url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&via=https://if2007.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3awW7DIBAE0P7/T6fXSpGdGRasVHo+WU1j7+MAZJafn/h6XVx/P32/v/9u/p9XT9524eHh4W0q/f3R9wXd/yW5vwLcv+V+yPDw8PDO8a4empeSLxv5d5N6Pljw8PDwvoA32QTfT+7J8/Hw8PD+L6/9SxsrtJEHHh4e3vO8SYQ6jy3aKORI1oKHh4cX8/Iu0vfcH+nv4eHh4Y276m0su1ZK2zwrqsXDw8M7wFuLBoogID5eMHnv/bvw8PDw9vLyBlU7TSdPmIQa0T0eHh7eAV77oDycnQe4a+/KlkI8PDy8Pbz8aFR+cCrZCs+HNerv4eHh4R3gTQqdRAa7hmD0Mjw8PLwlXh5G5MtGUtza5rtov+Hh4eFt5RUb06UtcltQvrRE7Tc8PDy8w7xJy7+NcfNwNtk6RzEEHh4e3lZeG8jmk3teegKowwg8PDy8A7x2W5wfwMqj3rXoocha8PDw8B7htRNuW8qkGTavFg8PD29vjDv5tN1qTxaGKIDGw8PDO8A73f5fWyryE1NRpIuHh4f3IC8JF9ai1eSZ7SGDYvXDw8PDO8Brm1X5FJ8vPG0s8qHLh4eHh3eAlxyByifxJMJYG+j22BYeHh7eaV57WikpvcVPKrmMcfHw8PAO89pG1K4dbHtoIBpiPDw8vEd4OXtXK2vShPvwdjw8PLxHePMwonh9EElMFio8PDy8c7x2KzxvYq3h86HBw8PDO8F7lVe7RZ4PRBuC4OHh4Z3mrU24kwUj34iv3W9YT/Dw8PACXv6DPx+tZGmZH0GIAhQ8PDy8Y7x8a9tO6+0xrF0HCPDw8PC+h5e39td2tslSMerv4eHh4T3Oa48LtPFrsl0ulhA8PDy8Y7y1KTtvgE2+mywS0aErPDw8vE289gf/JIBoC2oHa9Tfw8PDw/vM+wULU5KXWc3KBgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
