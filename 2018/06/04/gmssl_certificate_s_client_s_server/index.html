@@ -32,7 +32,7 @@
 <meta property="og:site_name" content="Yet Another Blog">
 <meta property="og:description" content="本文参考 GmSSL GitHub 的 Issue #8 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用gmssl命令生成 CA 证书、客户端证书、服务器端证书，并用s_client和s_server命令进行交互测试的过程。 准备工作与 GmSSL GitHub 的 Issue #8 类似，首先执行下面的命令： 12345mkdir demoCAcd demoCA/mkdi">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-04T08:27:17.758Z">
+<meta property="og:updated_time" content="2018-06-07T06:57:49.984Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试">
 <meta name="twitter:description" content="本文参考 GmSSL GitHub 的 Issue #8 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用gmssl命令生成 CA 证书、客户端证书、服务器端证书，并用s_client和s_server命令进行交互测试的过程。 准备工作与 GmSSL GitHub 的 Issue #8 类似，首先执行下面的命令： 12345mkdir demoCAcd demoCA/mkdi">
@@ -170,7 +170,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备工作"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备工作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生成一系列证书"><span class="post-toc-number">2.</span> <span class="post-toc-text">生成一系列证书</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CA-自签名证书"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CA 自签名证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#生成客户端和服务器端证书"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">生成客户端和服务器端证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用-CA-证书对客户端和服务器端-CSR-进行证书签发"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">用 CA 证书对客户端和服务器端 CSR 进行证书签发</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#s-client-和-s-server-命令行测试"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">s_client 和 s_server 命令行测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备工作"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备工作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生成一系列证书"><span class="post-toc-number">2.</span> <span class="post-toc-text">生成一系列证书</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CA-自签名证书"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CA 自签名证书</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#生成客户端和服务器端-Key-和-CSR"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">生成客户端和服务器端 Key 和 CSR</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用-CA-证书对客户端和服务器端-CSR-进行证书签发"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">用 CA 证书对客户端和服务器端 CSR 进行证书签发</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#s-client-和-s-server-命令行测试"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">s_client 和 s_server 命令行测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题</span></a></li></ol>
         </nav>
     </aside>
 
@@ -199,7 +199,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">../gmssl  ecparam -genkey -name sm2p256v1 -out cakey.pem    // 生成 key</span><br><span class="line">../gmssl  req -new -sm3 -key cakey.pem -out cacsr.pem       // 生成 CSR</span><br><span class="line">../gmssl req -x509 -sm3 -days 3650 -key cakey.pem -in cacsr.pem -out cacert.pem     // 自签名</span><br></pre></td></tr></table></figure>
 <p>用<code>../gmssl x509 -in cacert.pem -text</code>查看一下生成的 CA 证书。</p>
 <p>将 cakey.pem 文件移动至 private 目录下，cakey.pem 文件仍然在 demoCA 目录下。</p>
-<h3 id="生成客户端和服务器端证书"><a href="#生成客户端和服务器端证书" class="headerlink" title="生成客户端和服务器端证书"></a>生成客户端和服务器端证书</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out client_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key client_key.pem -out client_csr.pem</span><br><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out server_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key server_key.pem -out server_csr.pem</span><br></pre></td></tr></table></figure>
+<h3 id="生成客户端和服务器端-Key-和-CSR"><a href="#生成客户端和服务器端-Key-和-CSR" class="headerlink" title="生成客户端和服务器端 Key 和 CSR"></a>生成客户端和服务器端 Key 和 CSR</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out client_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key client_key.pem -out client_csr.pem</span><br><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out server_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key server_key.pem -out server_csr.pem</span><br></pre></td></tr></table></figure>
+<p>注意，生成 CSR 时，命令行中提示的信息需要填写。不填写的话，会在签发证书时提示 Common Name 缺失。</p>
 <h3 id="用-CA-证书对客户端和服务器端-CSR-进行证书签发"><a href="#用-CA-证书对客户端和服务器端-CSR-进行证书签发" class="headerlink" title="用 CA 证书对客户端和服务器端 CSR 进行证书签发"></a>用 CA 证书对客户端和服务器端 CSR 进行证书签发</h3><p>注意，这里是填坑最大的地方。按以前的步骤操作，总会出现各种各样奇怪的错误。在进行无数的搜索和测试后，我找到了以下可以 work 的方法：</p>
 <p><code>./gmssl ca -md sm3 -in client_csr.pem -out client_cert.pem -days 3650 -policy policy_anything</code></p>
 <p>类似的，对服务器端：<code>./gmssl ca -md sm3 -in server_csr.pem -out server_cert.pem -days 3650 -policy policy_anything</code>。</p>
@@ -236,7 +237,7 @@
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-04T08:27:17.758Z" itemprop="dateUpdated">2018-06-04 16:27:17</time>
+            <time datetime="2018-06-07T06:57:49.984Z" itemprop="dateUpdated">2018-06-07 14:57:49</time>
         </li>  
     </ul>
 </span>
