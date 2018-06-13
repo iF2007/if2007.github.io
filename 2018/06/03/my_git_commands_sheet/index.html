@@ -24,18 +24,18 @@
     
     
     <meta name="keywords" content="Git">
-    <meta name="description" content="本文记录了自己常用的 Git 命令/备忘以便日后查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
+    <meta name="description" content="本文记录了自己常用的 Git 命令，以便日后快速查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常用的 Git 命令备忘">
 <meta property="og:url" content="https://if2007.github.io/2018/06/03/my_git_commands_sheet/index.html">
 <meta property="og:site_name" content="Yet Another Blog">
-<meta property="og:description" content="本文记录了自己常用的 Git 命令/备忘以便日后查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
+<meta property="og:description" content="本文记录了自己常用的 Git 命令，以便日后快速查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-05T07:53:17.381Z">
+<meta property="og:updated_time" content="2018-06-13T02:01:58.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常用的 Git 命令备忘">
-<meta name="twitter:description" content="本文记录了自己常用的 Git 命令/备忘以便日后查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
+<meta name="twitter:description" content="本文记录了自己常用的 Git 命令，以便日后快速查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
     
         <link rel="alternate" type="application/atom+xml" title="Yet Another Blog" href="/atom.xml">
     
@@ -185,16 +185,17 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>本文记录了自己常用的 Git 命令/备忘以便日后查找</p>
+            <p>本文记录了自己常用的 Git 命令，以便日后快速查找</p>
 <ol>
 <li>一行查看 Git commit 历史：<code>git log --pretty=oneline</code></li>
 <li>彻底退回某一次 Commit（源代码回退）：<code>git reset --hard [commit_id]</code></li>
 <li>不彻底回退某一次 Commit（commit 信息回退，代码不变）：<code>git reset --soft [commit_id]</code></li>
 <li>切换至某一分支：<code>git checkout [branch_name]</code></li>
 <li>查看所有分支名称：<code>git branch -a</code></li>
-<li>添加上游：<code>git remote add upstream [git@...../xxx.git]</code></li>
-<li>从上游获取更新：<code>git fetch upstream</code></li>
-<li>将本地的更新提交至远程的某一分支：<code></code></li>
+<li>添加上游仓库：<code>git remote add upstream [git@...../xxx.git]</code></li>
+<li>从上游仓库获取更新：<code>git fetch upstream</code></li>
+<li>从上游仓库获取更新，需要将代码手动合并进来：<code>git merge [branch_name]</code>，例如<code>upstream/branch_name</code></li>
+<li>将本地分支 a 的更新提交至远程的分支 b：<code>git push origin [a]:[b]</code></li>
 <li>查看以前的操作：<code>git reflog</code></li>
 <li>移除上游：<code>git remote rm [upstream_name]</code></li>
 <li>提交本地的 test 分支作为远程的 test 分支：<code>git push origin test:test</code></li>
@@ -202,6 +203,8 @@
 <li>将 Add 和 Commit 合并为一步：<code>git commit -am [Commit msg]</code></li>
 <li><a href="https://if2007.github.io/2018/05/31/git_sync_upstream/">Git 克隆一个 fork 分支并同步原仓库的更新</a></li>
 <li>添加所有改变了的文件：<code>git add -u</code></li>
+<li>强制 push：<code>git push -f</code></li>
+<li>修改某次提交：<code>git commit --amend</code></li>
 </ol>
 
         </div>
@@ -226,7 +229,7 @@
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-05T07:53:17.381Z" itemprop="dateUpdated">2018-06-05 15:53:17</time>
+            <time datetime="2018-06-13T02:01:58.170Z" itemprop="dateUpdated">2018-06-13 10:01:58</time>
         </li>  
     </ul>
 </span>
