@@ -32,7 +32,7 @@
 <meta property="og:site_name" content="Yet Another Blog">
 <meta property="og:description" content="2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。  首先使用 TASSL 开源国密 SSL 库中的">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-14T12:46:52.933Z">
+<meta property="og:updated_time" content="2018-06-14T12:48:20.415Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 GmSSL 库 s_client&#x2F;s_server 测试国密 SSL 握手">
 <meta name="twitter:description" content="2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。  首先使用 TASSL 开源国密 SSL 库中的">
@@ -203,6 +203,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">New, GMTLSv1.1, Cipher is SM2-WITH-SMS4-SM3</span><br><span class="line">Server public key is 256 bit</span><br><span class="line">Secure Renegotiation IS NOT supported</span><br><span class="line">Compression: NONE</span><br><span class="line">Expansion: NONE</span><br><span class="line">No ALPN negotiated</span><br><span class="line">SSL-Session:</span><br><span class="line">    Protocol  : GMTLSv1.1</span><br><span class="line">    Cipher    : SM2-WITH-SMS4-SM3</span><br><span class="line">    Session-ID: B77C271E6FD1A86E5E15135BC7EE23B1EFAAD86A5EA1947EB8AF1D9A48275771</span><br><span class="line">    Session-ID-ctx:</span><br><span class="line">    Master-Key: 645913A47210C8A389790267C328F867EDA4711D8FB163AD67CDF9310683FCD7181A21489A61BB1CD8B4DA429DBAEF7D</span><br><span class="line">    PSK identity: None</span><br><span class="line">    PSK identity hint: None</span><br><span class="line">    SRP username: None</span><br><span class="line">    Start Time: 1528979823</span><br><span class="line">    Timeout   : 7200 (sec)</span><br><span class="line">    Verify return code: 21 (unable to verify the first certificate)</span><br><span class="line">    Extended master secret: no</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
 <p>看到正确的握手和输出简直泪奔啊 ┭┮﹏┭┮</p>
 <p>测试用的证书可<a href="sm2Certs.7z">下载</a></p>
+<p>P.S 目前的问题：GmSSL 与 TASSL 无法进行握手；GmSSL 做服务器时，360 浏览器国密专版无法进行握手。</p>
 <hr>
 <p><strong>以下内容为本文的早期版本，供遇到类似问题的同学遇到参考</strong></p>
 <p>本文参考 GmSSL GitHub 的 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">Issue #8</a> 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用<code>gmssl</code>命令生成 CA 证书、客户端证书、服务器端证书，并用<code>s_client</code>和<code>s_server</code>命令进行交互测试的过程。</p>
@@ -250,7 +251,7 @@
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-14T12:46:52.933Z" itemprop="dateUpdated">2018-06-14 20:46:52</time>
+            <time datetime="2018-06-14T12:48:20.415Z" itemprop="dateUpdated">2018-06-14 20:48:20</time>
         </li>  
     </ul>
 </span>
