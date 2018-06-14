@@ -176,7 +176,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/04/gmssl_certificate_s_client_s_server/">使用 GmSSL 库生成证书并用 s_client 和 s_server 做命令行测试</a>
+      <a class="post-title-link" href="/2018/06/04/gmssl_certificate_s_client_s_server/">使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手</a>
     </h3>
   
 
@@ -186,9 +186,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        本文参考 GmSSL GitHub 的 Issue #8 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用gmssl命令生成 CA 证书、客户端证书、服务器端证书，并用s_client和s_server命令进行交互测试的过程。
-准备工作与 GmSSL GitHub 的 Issue #8 类似，首先执行下面的命令：
-12345mkdir demoCAcd demoCA/m...
+        2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。
+
+首先使用 TASSL 开源国密 SSL ...
     
 
         <a href="/2018/06/04/gmssl_certificate_s_client_s_server/" class="post-more waves-effect waves-button">
