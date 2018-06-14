@@ -32,7 +32,7 @@
 <meta property="og:site_name" content="Yet Another Blog">
 <meta property="og:description" content="2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。  首先使用 TASSL 开源国密 SSL 库中的">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-14T12:41:17.303Z">
+<meta property="og:updated_time" content="2018-06-14T12:45:54.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 GmSSL 库 s_client&#x2F;s_server 测试国密 SSL 握手">
 <meta name="twitter:description" content="2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。  首先使用 TASSL 开源国密 SSL 库中的">
@@ -204,6 +204,7 @@
 <p>看到正确的握手和输出简直泪奔啊 ┭┮﹏┭┮</p>
 <p>测试用的证书可<a href="sm2Certs.7z">下载</a></p>
 <hr>
+<p><strong>以下内容为本文的早期版本，供遇到类似问题的同学遇到参考</strong></p>
 <p>本文参考 GmSSL GitHub 的 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">Issue #8</a> 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用<code>gmssl</code>命令生成 CA 证书、客户端证书、服务器端证书，并用<code>s_client</code>和<code>s_server</code>命令进行交互测试的过程。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>与 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">GmSSL GitHub 的 Issue #8</a> 类似，首先执行下面的命令：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir demoCA</span><br><span class="line"><span class="built_in">cd</span> demoCA/</span><br><span class="line">mkdir certs crl newcerts private</span><br><span class="line">touch index.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"01"</span> &gt; serial</span><br></pre></td></tr></table></figure>
@@ -249,7 +250,7 @@
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-14T12:41:17.303Z" itemprop="dateUpdated">2018-06-14 20:41:17</time>
+            <time datetime="2018-06-14T12:45:54.949Z" itemprop="dateUpdated">2018-06-14 20:45:54</time>
         </li>  
     </ul>
 </span>
