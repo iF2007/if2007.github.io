@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     
     
-    <link rel="canonical" href="true/2018/06/04/gmssl_certificate_s_client_s_server/">
+    <link rel="canonical" href="true/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/">
     
     
     <title>使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手 | Yet Another Blog</title>
@@ -28,11 +28,11 @@
 <meta name="keywords" content="GmSSL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 GmSSL 库 s_client&#x2F;s_server 测试国密 SSL 握手">
-<meta property="og:url" content="https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/index.html">
+<meta property="og:url" content="https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/index.html">
 <meta property="og:site_name" content="Yet Another Blog">
 <meta property="og:description" content="2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。  首先使用 TASSL 开源国密 SSL 库中的">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-14T12:39:36.802Z">
+<meta property="og:updated_time" content="2018-06-14T12:41:17.303Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 GmSSL 库 s_client&#x2F;s_server 测试国密 SSL 握手">
 <meta name="twitter:description" content="2018.6.14 更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。  首先使用 TASSL 开源国密 SSL 库中的">
@@ -175,7 +175,7 @@
     </aside>
 
 
-<article id="post-gmssl_certificate_s_client_s_server"
+<article id="post-gmssl_s_client_s_server_handshake_sm2_sm4_sm3"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
@@ -201,7 +201,8 @@
 </ol>
 <p>握手成功的输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">New, GMTLSv1.1, Cipher is SM2-WITH-SMS4-SM3</span><br><span class="line">Server public key is 256 bit</span><br><span class="line">Secure Renegotiation IS NOT supported</span><br><span class="line">Compression: NONE</span><br><span class="line">Expansion: NONE</span><br><span class="line">No ALPN negotiated</span><br><span class="line">SSL-Session:</span><br><span class="line">    Protocol  : GMTLSv1.1</span><br><span class="line">    Cipher    : SM2-WITH-SMS4-SM3</span><br><span class="line">    Session-ID: B77C271E6FD1A86E5E15135BC7EE23B1EFAAD86A5EA1947EB8AF1D9A48275771</span><br><span class="line">    Session-ID-ctx:</span><br><span class="line">    Master-Key: 645913A47210C8A389790267C328F867EDA4711D8FB163AD67CDF9310683FCD7181A21489A61BB1CD8B4DA429DBAEF7D</span><br><span class="line">    PSK identity: None</span><br><span class="line">    PSK identity hint: None</span><br><span class="line">    SRP username: None</span><br><span class="line">    Start Time: 1528979823</span><br><span class="line">    Timeout   : 7200 (sec)</span><br><span class="line">    Verify return code: 21 (unable to verify the first certificate)</span><br><span class="line">    Extended master secret: no</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<p>看到正确的握手和输出简直泪奔啊┭┮﹏┭┮</p>
+<p>看到正确的握手和输出简直泪奔啊 ┭┮﹏┭┮</p>
+<p>测试用的证书可<a href="sm2Certs.7z">下载</a></p>
 <hr>
 <p>本文参考 GmSSL GitHub 的 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">Issue #8</a> 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用<code>gmssl</code>命令生成 CA 证书、客户端证书、服务器端证书，并用<code>s_client</code>和<code>s_server</code>命令进行交互测试的过程。</p>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>与 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">GmSSL GitHub 的 Issue #8</a> 类似，首先执行下面的命令：</p>
@@ -243,12 +244,12 @@
 
         <li class="post-copyright-link">
             <strong>URL: </strong>
-            <a href="/2018/06/04/gmssl_certificate_s_client_s_server/">https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/</a>
+            <a href="/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/">https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/</a>
         </li>
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-14T12:39:36.802Z" itemprop="dateUpdated">2018-06-14 20:39:36</time>
+            <time datetime="2018-06-14T12:41:17.303Z" itemprop="dateUpdated">2018-06-14 20:41:17</time>
         </li>  
     </ul>
 </span>
@@ -279,7 +280,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -289,22 +290,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&via=https://if2007.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/&via=https://if2007.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -420,7 +421,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -430,22 +431,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/&title=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/&via=https://if2007.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手》 — Yet Another Blog&url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/&via=https://if2007.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/04/gmssl_certificate_s_client_s_server/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -456,7 +457,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3awW7DIBAE0P7/T6fXSpGdGRasVHo+WU1j7+MAZJafn/h6XVx/P32/v/9u/p9XT9524eHh4W0q/f3R9wXd/yW5vwLcv+V+yPDw8PDO8a4empeSLxv5d5N6Pljw8PDwvoA32QTfT+7J8/Hw8PD+L6/9SxsrtJEHHh4e3vO8SYQ6jy3aKORI1oKHh4cX8/Iu0vfcH+nv4eHh4Y276m0su1ZK2zwrqsXDw8M7wFuLBoogID5eMHnv/bvw8PDw9vLyBlU7TSdPmIQa0T0eHh7eAV77oDycnQe4a+/KlkI8PDy8Pbz8aFR+cCrZCs+HNerv4eHh4R3gTQqdRAa7hmD0Mjw8PLwlXh5G5MtGUtza5rtov+Hh4eFt5RUb06UtcltQvrRE7Tc8PDy8w7xJy7+NcfNwNtk6RzEEHh4e3lZeG8jmk3teegKowwg8PDy8A7x2W5wfwMqj3rXoocha8PDw8B7htRNuW8qkGTavFg8PD29vjDv5tN1qTxaGKIDGw8PDO8A73f5fWyryE1NRpIuHh4f3IC8JF9ai1eSZ7SGDYvXDw8PDO8Brm1X5FJ8vPG0s8qHLh4eHh3eAlxyByifxJMJYG+j22BYeHh7eaV57WikpvcVPKrmMcfHw8PAO89pG1K4dbHtoIBpiPDw8vEd4OXtXK2vShPvwdjw8PLxHePMwonh9EElMFio8PDy8c7x2KzxvYq3h86HBw8PDO8F7lVe7RZ4PRBuC4OHh4Z3mrU24kwUj34iv3W9YT/Dw8PACXv6DPx+tZGmZH0GIAhQ8PDy8Y7x8a9tO6+0xrF0HCPDw8PC+h5e39td2tslSMerv4eHh4T3Oa48LtPFrsl0ulhA8PDy8Y7y1KTtvgE2+mywS0aErPDw8vE289gf/JIBoC2oHa9Tfw8PDw/vM+wULU5KXWc3KBgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqUlEQVR42u3aQXLjMAwEwPz/08k1h8g7A5BeH1onl0sS0XKVCAP4+oqP71/H72+Sz0/Xvv7+9Z0PH3h4eHiL0GcBtfd5fe3rOPO18PDw8G7zkts9nT970Sdrbc7Bw8PD+xzeLI1Oct1ZQo+Hh4f3+bz8/HzDyLcZPDw8vM/h5UWE5No24c7LHBdrLXh4eHgxL+8ifc7nK/09PDw8vHVXfZPaJil7u83U0eLh4eFd4LUhzpLaWTGiLfU+3hkPDw/vAi8HbGD7Ntsq+cbDw8M7ynsdXNK83zS08lGtJM5ir8DDw8M7xNu3nRJ2++DaEgYeHh7ePd7ZdDYpGcya/fVmgIeHh3eZNysltONZSXDJKsVGhYeHh3eNl28Sm3PaJlk7gvD4XwEPDw/vKK99Kc/S3Db0WaIf9ffw8PDwLvBOLdMOWs2OoiWGh4eHd4iXN6tmSXBbeG2LvHh4eHj/i5ePnybt/3ZjSNY9kEbj4eHhHeLlqXAbSp5M5+C8AYaHh4d3m9f+7a9b+KMycV7q3ST6eHh4eKd4bfl1A8vT9OT74rfCw8PDG/HasPbPr03c2y0BDw8P7/28NkmdJdmbB1eUdPHw8PAu89r2UhtKfs9ZDfaPO+Dh4eFd4OVlhaSttWrwx0WQWZkDDw8P7ywvH3LKF5gl3zNY9Ivh4eHhvZF3amigTdDbttnjtXh4eHiXebOGVhvEbOiqLUzg4eHh3eB9l0d7VfGMy9Q5Srjx8PDwLvDaF+5mHCrfGGattQP7CR4eHt6hfnpb6p1tFZtCcDEfgYeHh3eUN0ttNyNQp/aufzx6PDw8vA/gnUqIZ0n2gdEBPDw8vLfz9q39pDHWjjLg4eHhvZ/XNr3aMkReRNg87sfJCDw8PLyjvE1pNV9gFlCSXh848PDw8FLeDxebkpdW09uAAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 
