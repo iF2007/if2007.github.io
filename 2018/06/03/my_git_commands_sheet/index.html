@@ -32,7 +32,7 @@
 <meta property="og:site_name" content="Yet Another Blog">
 <meta property="og:description" content="本文记录了自己常用的 Git 命令，以便日后快速查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-14T05:52:11.206Z">
+<meta property="og:updated_time" content="2018-06-15T07:04:08.342Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常用的 Git 命令备忘">
 <meta name="twitter:description" content="本文记录了自己常用的 Git 命令，以便日后快速查找  一行查看 Git commit 历史：git log --pretty=oneline 彻底退回某一次 Commit（源代码回退）：git reset --hard [commit_id] 不彻底回退某一次 Commit（commit 信息回退，代码不变）：git reset --soft [commit_id] 切换至某一分支：git ch">
@@ -207,6 +207,7 @@
 <li>修改某次提交：<code>git commit --amend</code></li>
 <li>两次 commit 的差别统计信息：<code>git diff [commit_a_id] [commit_b_id] --stat</code></li>
 <li>撤销已 push 到远端的 commit，保留本地文件的修改，并重新提交至远端，达到覆盖掉以前提交的 commit 的效果：<code>git reset --soft [commit_id]; git commit -am &quot;comment&quot;; git push origin [branch_name] --force</code></li>
+<li>撤销 <code>git add .</code>：<code>git reset</code></li>
 </ol>
 
         </div>
@@ -231,7 +232,7 @@
 
         <li class="post-copyright-date">
             <strong>Last updated: </strong>
-            <time datetime="2018-06-14T05:52:11.206Z" itemprop="dateUpdated">2018-06-14 13:52:11</time>
+            <time datetime="2018-06-15T07:04:08.342Z" itemprop="dateUpdated">2018-06-15 15:04:08</time>
         </li>  
     </ul>
 </span>
@@ -307,21 +308,14 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
-  
-    <div class="waves-block waves-effect prev">
-      <a href="/2018/06/04/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手</h4>
-      </a>
-    </div>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/05/31/git_sync_upstream/" id="post-next" class="post-nav-link">
+      <a href="/2018/05/31/openssl_cert_client_server/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Git 克隆一个 fork 分支并同步原仓库的更新</h4>
+        <h4 class="title">OpenSSL 生成证书并用 s_client/s_server 测试链接的命令</h4>
       </a>
     </div>
   
