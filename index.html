@@ -158,6 +158,55 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-gmssl_s_client_s_server_handshake_sm2_sm4_sm3"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-07 00:00:00" datetime="2018-06-06T16:00:00.000Z"  itemprop="datePublished">2018-06-07</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/GmSSL/">GmSSL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/07/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/">使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        更新 - 国密 SSL 握手成功根据 GmSSL Issue #503 下 liclicli 同学提供的方法，已经可以使用 GmSSL Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 SM2-WITH-SM4-SM3。
+
+首先使用 TASSL 开源国密 SSL 库中的证书生成脚本生...
+    
+
+        <a href="/2018/06/07/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/" class="post-more waves-effect waves-button">
+            Continue reading
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GmSSL/">GmSSL</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-my_git_commands_sheet"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -202,60 +251,6 @@
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-openssl_cert_client_server"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-31 00:00:00" datetime="2018-05-30T16:00:00.000Z"  itemprop="datePublished">2018-05-31</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OpenSSL/">OpenSSL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/31/openssl_cert_client_server/">OpenSSL 生成证书并用 s_client/s_server 测试链接的命令</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        本文记录：
-
-如何从 OpenSSL 源代码编译生成库文件
-从 openssl 命令行生成一部分常用证书
-用 s_server 命令自己搭建测试服务器，并用 s_client 链接
-
-注：本文测试的 OpenSSL 版本为 1.1.0 和更新的 1.1.1+。
-OpenSSL 编译相关配置 OpenSSL，得到静态的可以 debug 的库./Configure -g linux-x86_64...
-    
-
-        <a href="/2018/05/31/openssl_cert_client_server/" class="post-more waves-effect waves-button">
-            Continue reading
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenSSL/">OpenSSL</a></li></ul>
 
     </div>
     
@@ -321,6 +316,60 @@ git remote -v
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-openssl_cert_client_server"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-05-31 00:00:00" datetime="2018-05-30T16:00:00.000Z"  itemprop="datePublished">2018-05-31</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OpenSSL/">OpenSSL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/05/31/openssl_cert_client_server/">OpenSSL 生成证书并用 s_client/s_server 测试链接的命令</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        本文记录：
+
+如何从 OpenSSL 源代码编译生成库文件
+从 openssl 命令行生成一部分常用证书
+用 s_server 命令自己搭建测试服务器，并用 s_client 链接
+
+注：本文测试的 OpenSSL 版本为 1.1.0 和更新的 1.1.1+。
+OpenSSL 编译相关配置 OpenSSL，得到静态的可以 debug 的库./Configure -g linux-x86_64...
+    
+
+        <a href="/2018/05/31/openssl_cert_client_server/" class="post-more waves-effect waves-button">
+            Continue reading
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenSSL/">OpenSSL</a></li></ul>
 
     </div>
     

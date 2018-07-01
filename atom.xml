@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://if2007.github.io/"/>
-  <updated>2018-06-15T07:04:08.342Z</updated>
+  <updated>2018-07-01T02:32:45.062Z</updated>
   <id>https://if2007.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 GmSSL 库 s_client/s_server 测试国密 SSL 握手</title>
+    <link href="https://if2007.github.io/2018/06/07/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/"/>
+    <id>https://if2007.github.io/2018/06/07/gmssl_s_client_s_server_handshake_sm2_sm4_sm3/</id>
+    <published>2018-06-06T16:00:00.000Z</published>
+    <updated>2018-07-01T02:32:45.062Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="更新-国密-SSL-握手成功"><a href="#更新-国密-SSL-握手成功" class="headerlink" title="更新 - 国密 SSL 握手成功"></a>更新 - 国密 SSL 握手成功</h2><p>根据 <a href="https://github.com/guanzhi/GmSSL/issues/503" target="_blank" rel="noopener">GmSSL Issue #503</a> 下 <a href="https://github.com/liclicli" target="_blank" rel="noopener">liclicli</a> 同学提供的方法，已经可以使用 GmSSL <a href="https://github.com/guanzhi/GmSSL/tree/0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f" target="_blank" rel="noopener">Commit 0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f</a> 编译生成的二进制文件成功进行国密 SSL 的握手，使用的套件为 <code>SM2-WITH-SM4-SM3</code>。</p><ol><li>首先使用 <a href="https://github.com/jntass/TASSL" target="_blank" rel="noopener">TASSL</a> 开源国密 SSL 库中的证书生成脚本生成一系列证书，包括 CA、客户端加密/签名和服务器端加密/签名证书。方法很简单，即运行 <code>Tassl_demo/mk_tls_cert</code> 下的 <code>SM2certgen.sh</code> 脚本，共生成 15 个 PEM 文件</li><li>复制需要的证书和密钥。这里我们以 <code>SM2-WITH-SM4-SM3</code> 套件为例，因此需要以下证书和密钥：<code>SS.cert.pem</code>、<code>SS.key.pem</code>、<code>SE.cert.pem</code>、<code>SE.key.pem</code>，其中 <code>SS</code> 开头的是服务器端签名用的，<code>SE</code> 开头的是服务器端加密用的。由于国密 SSL 的双证书体系，要注意两个不同的证书</li><li>客户端命令：<code>./gmssl s_client -connect localhost:4333 -msg -debug -gmtls –state</code>；服务器端命令：<code>./gmssl s_server -gmtls -accept 4333 -cert SS.cert.pem -key SS.key.pem -dcert SE.cert.pem -dkey SE.key.pem -msg -debug –state</code></li><li>Done! 特别鸣谢 <a href="https://github.com/liclicli" target="_blank" rel="noopener">liclicli</a> 同学的帮助</li></ol><p>握手成功的输出：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">New, GMTLSv1.1, Cipher is SM2-WITH-SMS4-SM3</span><br><span class="line">Server public key is 256 bit</span><br><span class="line">Secure Renegotiation IS NOT supported</span><br><span class="line">Compression: NONE</span><br><span class="line">Expansion: NONE</span><br><span class="line">No ALPN negotiated</span><br><span class="line">SSL-Session:</span><br><span class="line">    Protocol  : GMTLSv1.1</span><br><span class="line">    Cipher    : SM2-WITH-SMS4-SM3</span><br><span class="line">    Session-ID: B77C271E6FD1A86E5E15135BC7EE23B1EFAAD86A5EA1947EB8AF1D9A48275771</span><br><span class="line">    Session-ID-ctx:</span><br><span class="line">    Master-Key: 645913A47210C8A389790267C328F867EDA4711D8FB163AD67CDF9310683FCD7181A21489A61BB1CD8B4DA429DBAEF7D</span><br><span class="line">    PSK identity: None</span><br><span class="line">    PSK identity hint: None</span><br><span class="line">    SRP username: None</span><br><span class="line">    Start Time: 1528979823</span><br><span class="line">    Timeout   : 7200 (sec)</span><br><span class="line">    Verify return code: 21 (unable to verify the first certificate)</span><br><span class="line">    Extended master secret: no</span><br><span class="line">---</span><br></pre></td></tr></table></figure><p>看到正确的握手和输出简直泪奔啊 ┭┮﹏┭┮</p><p>测试用的证书可<a href="sm2Certs.7z">下载</a></p><p>P.S 目前的问题：GmSSL 与 TASSL 无法进行握手；GmSSL 做服务器时，360 浏览器国密专版无法进行握手。</p><hr><p><strong>以下内容为本文的早期版本，供遇到类似问题的同学遇到参考</strong></p><p>本文参考 GmSSL GitHub 的 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">Issue #8</a> 下的一个不完整的解决方法，结合自己的摸索实践和填坑，给出一套完整的：用<code>gmssl</code>命令生成 CA 证书、客户端证书、服务器端证书，并用<code>s_client</code>和<code>s_server</code>命令进行交互测试的过程。</p><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>与 <a href="https://github.com/guanzhi/GmSSL/issues/8" target="_blank" rel="noopener">GmSSL GitHub 的 Issue #8</a> 类似，首先执行下面的命令：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir demoCA</span><br><span class="line"><span class="built_in">cd</span> demoCA/</span><br><span class="line">mkdir certs crl newcerts private</span><br><span class="line">touch index.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"01"</span> &gt; serial</span><br></pre></td></tr></table></figure><h2 id="生成一系列证书"><a href="#生成一系列证书" class="headerlink" title="生成一系列证书"></a>生成一系列证书</h2><h3 id="CA-自签名证书"><a href="#CA-自签名证书" class="headerlink" title="CA 自签名证书"></a>CA 自签名证书</h3><p>利用<code>gmssl</code>命令行工具，生成自签名的 CA 证书和 key，并进行自签名。这里，我们的证书使用 SM2 椭圆曲线算法和 SM3 哈希算法生成的：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">../gmssl ecparam -genkey -name sm2p256v1 -out cakey.pem    // 生成 key</span><br><span class="line">../gmssl req -new -sm3 -key cakey.pem -out cacsr.pem       // 生成 CSR</span><br><span class="line">../gmssl req -x509 -sm3 -days 3650 -key cakey.pem -<span class="keyword">in</span> cacsr.pem -out cacert.pem     // 自签名</span><br></pre></td></tr></table></figure><p>用<code>../gmssl x509 -in cacert.pem -text</code>查看一下生成的 CA 证书。</p><p>将 cakey.pem 文件移动至 private 目录下，cakey.pem 文件仍然在 demoCA 目录下。</p><h3 id="生成客户端和服务器端-Key-和-CSR"><a href="#生成客户端和服务器端-Key-和-CSR" class="headerlink" title="生成客户端和服务器端 Key 和 CSR"></a>生成客户端和服务器端 Key 和 CSR</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out client_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key client_key.pem -out client_csr.pem</span><br><span class="line">./gmssl ecparam -genkey -name sm2p256v1 -out server_key.pem</span><br><span class="line">./gmssl req -new -sm3 -key server_key.pem -out server_csr.pem</span><br></pre></td></tr></table></figure><p>注意，生成 CSR 时，命令行中提示的信息需要填写。不填写的话，会在签发证书时提示 Common Name 缺失。</p><h3 id="用-CA-证书对客户端和服务器端-CSR-进行证书签发"><a href="#用-CA-证书对客户端和服务器端-CSR-进行证书签发" class="headerlink" title="用 CA 证书对客户端和服务器端 CSR 进行证书签发"></a>用 CA 证书对客户端和服务器端 CSR 进行证书签发</h3><p>注意，这里是填坑最大的地方。按以前的步骤操作，总会出现各种各样奇怪的错误。在进行无数的搜索和测试后，我找到了以下可以 work 的方法：</p><p><code>./gmssl ca -md sm3 -in client_csr.pem -out client_cert.pem -days 3650 -policy policy_anything</code></p><p>类似的，对服务器端：<code>./gmssl ca -md sm3 -in server_csr.pem -out server_cert.pem -days 3650 -policy policy_anything</code>。</p><p>最重要的就是<strong>-policy policy_anything</strong>部分。这个是用于解决<code>The stateOrProvinceName field needed to be the same in the CA certificate xxx and the request xxx</code>的问题。<a href="https://stackoverflow.com/questions/6976127/signing-a-certificate-with-my-ca" target="_blank" rel="noopener">有人说</a>可以修改<code>openssl.cnf</code>文件中的<code>string_mask</code>为<code>pkix</code>值，但在 commit 值为 <a href="https://github.com/guanzhi/GmSSL/tree/0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f" target="_blank" rel="noopener">0adf4ce188bde5f9bdfcdf2b5859b1f0c687e64f</a> 的 GmSSL 库中（2018.5.27）无法 work。</p><h3 id="s-client-和-s-server-命令行测试"><a href="#s-client-和-s-server-命令行测试" class="headerlink" title="s_client 和 s_server 命令行测试"></a>s_client 和 s_server 命令行测试</h3><p>与 OpenSSL 的命令行一致，可以用以下 GmSSL 命令行进行客户端和服务器端的模拟测试：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./gmssl s_server -key server_key.pem -cert server_cert.pem -accept 4333</span><br><span class="line">./gmssl s_client -key client_key.pem -cert client_cert.pem -connect localhost:4333</span><br></pre></td></tr></table></figure><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>目前会出现以下错误：</p><p>服务器端：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$./gmssl s_server -key server_key.pem -cert server_cert.pem -accept 4333</span><br><span class="line">Using default temp DH parameters</span><br><span class="line">[GMTLS_DEBUG] <span class="built_in">set</span> sm2 encryption certificate</span><br><span class="line">[GMTLS_DEBUG] <span class="built_in">set</span> sm2 decryption private key</span><br><span class="line">ACCEPT</span><br><span class="line">ERROR</span><br><span class="line">139670675003136:error:1417A0C1:SSL routines:tls_post_process_client_hello:no shared cipher:ssl/statem/statem_srvr.c:1502:</span><br><span class="line">shutting down SSL</span><br><span class="line">CONNECTION CLOSED</span><br></pre></td></tr></table></figure><p>客户端：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$./gmssl s_client -key client_key.pem -cert client_cert.pem -connect localhost:4333</span><br><span class="line">[GMTLS_DEBUG] <span class="built_in">set</span> sm2 encryption certificate</span><br><span class="line">[GMTLS_DEBUG] <span class="built_in">set</span> sm2 decryption private key</span><br><span class="line">CONNECTED(00000003)</span><br><span class="line">139947870295808:error:14094410:SSL routines:ssl3_read_bytes:sslv3 alert handshake failure:ssl/record/rec_layer_s3.c:1385:SSL alert number 40</span><br><span class="line">---</span><br><span class="line">no peer certificate available</span><br><span class="line">---</span><br><span class="line">No client certificate CA names sent</span><br><span class="line">---</span><br><span class="line">SSL handshake has <span class="built_in">read</span> 7 bytes and written 62 bytes</span><br><span class="line">Verification: OK</span><br><span class="line">---</span><br><span class="line">New, (NONE), Cipher is (NONE)</span><br><span class="line">Secure Renegotiation IS NOT supported</span><br><span class="line">Compression: NONE</span><br><span class="line">Expansion: NONE</span><br><span class="line">No ALPN negotiated</span><br><span class="line">SSL-Session:</span><br><span class="line">    Protocol  : GMTLSv1.1</span><br><span class="line">    Cipher    : 0000</span><br><span class="line">    Session-ID:</span><br><span class="line">    Session-ID-ctx:</span><br><span class="line">    Master-Key:</span><br><span class="line">    PSK identity: None</span><br><span class="line">    PSK identity hint: None</span><br><span class="line">    SRP username: None</span><br><span class="line">    Start Time: 1528099250</span><br><span class="line">    Timeout   : 7200 (sec)</span><br><span class="line">    Verify <span class="built_in">return</span> code: 0 (ok)</span><br><span class="line">    Extended master secret: no</span><br><span class="line">---</span><br></pre></td></tr></table></figure><p>目前错误原因未知。</p><p>希望本文能对你有所帮助，也希望能一起讨论存在的问题。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;更新-国密-SSL-握手成功&quot;&gt;&lt;a href=&quot;#更新-国密-SSL-握手成功&quot; class=&quot;headerlink&quot; title=&quot;更新 - 国密 SSL 握手成功&quot;&gt;&lt;/a&gt;更新 - 国密 SSL 握手成功&lt;/h2&gt;&lt;p&gt;根据 &lt;a href=&quot;https:
+      
+    
+    </summary>
+    
+      <category term="GmSSL" scheme="https://if2007.github.io/categories/GmSSL/"/>
+    
+    
+      <category term="GmSSL" scheme="https://if2007.github.io/tags/GmSSL/"/>
+    
+  </entry>
   
   <entry>
     <title>常用的 Git 命令备忘</title>
@@ -33,6 +58,35 @@
 &lt;ol&gt;
 &lt;li&gt;一行查看 Git commit 历史：&lt;code&gt;git log --pretty=oneline&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;彻底退回某一次 Commit（源代码回退）：&lt;code&gt;git
+      
+    
+    </summary>
+    
+      <category term="Git" scheme="https://if2007.github.io/categories/Git/"/>
+    
+    
+      <category term="Git" scheme="https://if2007.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git 克隆一个 fork 分支并同步原仓库的更新</title>
+    <link href="https://if2007.github.io/2018/05/31/git_sync_upstream/"/>
+    <id>https://if2007.github.io/2018/05/31/git_sync_upstream/</id>
+    <published>2018-05-30T16:00:00.000Z</published>
+    <updated>2018-06-01T03:48:33.449Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。</p><ol><li>克隆远程仓库</li></ol><p><code>git clone git@xxx/openssl.git</code></p><ol start="2"><li>查看所有分支</li></ol><p><code>git branch -a</code></p><ol start="3"><li>切换到某个分支</li></ol><p><code>git checkout xxx</code></p><ol start="4"><li>查看远程状态</li></ol><p><code>git remote -v</code></p><ol start="5"><li>添加远程的仓库。这里添加的仓库就是你期望从哪个仓库更新他们新提交的代码并合并到你的分支里的那个</li></ol><p><code>git remote add upstream https://......git</code></p><ol start="6"><li>确认是否配置成功</li></ol><p><code>git remote -v</code></p><p>此时应该有 4 行</p><ol start="7"><li>从上游仓库获取新的内容，同步到本地</li></ol><p><code>git fetch upstream</code></p><p>新的内容会被存储在一个本地 upstream/master 中</p><blockquote><p><a href="https://git-scm.com/book/zh/v1/Git-%E5%9F%BA%E7%A1%80-%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8" target="_blank" rel="noopener">Git 基础 - 远程仓库的使用</a>: <code>git fetch origin</code> 会抓取从你上次克隆以来别人上传到此远程仓库中的所有更新（或是上次 fetch 以来别人提交的更新）。有一点很重要，需要记住，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。</p></blockquote><ol start="8"><li>切换到本地主分支 (optional)</li></ol><p><code>git checkout master</code></p><ol start="9"><li>将 upstream/master 分支合并到 master 上。此时，已经完成了同步，且不会丢掉本地修改的代码</li></ol><p><code>git merge upstream/master</code></p><p><em>感谢：<a href="https://www.zhihu.com/question/28676261/answer/44606041" target="_blank" rel="noopener">https://www.zhihu.com/question/28676261/answer/44606041</a></em></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;克隆远程仓库&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;git clone git@xxx/openssl.git&lt;
       
     
     </summary>
@@ -72,35 +126,6 @@
     
     
       <category term="OpenSSL" scheme="https://if2007.github.io/tags/OpenSSL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git 克隆一个 fork 分支并同步原仓库的更新</title>
-    <link href="https://if2007.github.io/2018/05/31/git_sync_upstream/"/>
-    <id>https://if2007.github.io/2018/05/31/git_sync_upstream/</id>
-    <published>2018-05-30T16:00:00.000Z</published>
-    <updated>2018-06-01T03:48:33.449Z</updated>
-    
-    <content type="html"><![CDATA[<p>本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。</p><ol><li>克隆远程仓库</li></ol><p><code>git clone git@xxx/openssl.git</code></p><ol start="2"><li>查看所有分支</li></ol><p><code>git branch -a</code></p><ol start="3"><li>切换到某个分支</li></ol><p><code>git checkout xxx</code></p><ol start="4"><li>查看远程状态</li></ol><p><code>git remote -v</code></p><ol start="5"><li>添加远程的仓库。这里添加的仓库就是你期望从哪个仓库更新他们新提交的代码并合并到你的分支里的那个</li></ol><p><code>git remote add upstream https://......git</code></p><ol start="6"><li>确认是否配置成功</li></ol><p><code>git remote -v</code></p><p>此时应该有 4 行</p><ol start="7"><li>从上游仓库获取新的内容，同步到本地</li></ol><p><code>git fetch upstream</code></p><p>新的内容会被存储在一个本地 upstream/master 中</p><blockquote><p><a href="https://git-scm.com/book/zh/v1/Git-%E5%9F%BA%E7%A1%80-%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8" target="_blank" rel="noopener">Git 基础 - 远程仓库的使用</a>: <code>git fetch origin</code> 会抓取从你上次克隆以来别人上传到此远程仓库中的所有更新（或是上次 fetch 以来别人提交的更新）。有一点很重要，需要记住，fetch 命令只是将远端的数据拉到本地仓库，并不自动合并到当前工作分支，只有当你确实准备好了，才能手工合并。</p></blockquote><ol start="8"><li>切换到本地主分支 (optional)</li></ol><p><code>git checkout master</code></p><ol start="9"><li>将 upstream/master 分支合并到 master 上。此时，已经完成了同步，且不会丢掉本地修改的代码</li></ol><p><code>git merge upstream/master</code></p><p><em>感谢：<a href="https://www.zhihu.com/question/28676261/answer/44606041" target="_blank" rel="noopener">https://www.zhihu.com/question/28676261/answer/44606041</a></em></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;本文记录如何从 Git 克隆一个仓库，切换到一个分支，添加上游仓库，同步上游的更新至本地（本地自己做的更新不会被上游的更新覆盖掉）。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;克隆远程仓库&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;code&gt;git clone git@xxx/openssl.git&lt;
-      
-    
-    </summary>
-    
-      <category term="Git" scheme="https://if2007.github.io/categories/Git/"/>
-    
-    
-      <category term="Git" scheme="https://if2007.github.io/tags/Git/"/>
     
   </entry>
   
