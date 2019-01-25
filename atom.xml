@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://if2007.github.io/"/>
-  <updated>2018-10-31T05:29:18.062Z</updated>
+  <updated>2019-01-25T12:31:45.409Z</updated>
   <id>https://if2007.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从 iOS App 的 IPA 文件提取资源 / 素材文件</title>
+    <link href="https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/"/>
+    <id>https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/</id>
+    <published>2019-01-24T16:00:00.000Z</published>
+    <updated>2019-01-25T12:31:45.409Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近对<a href="https://itunes.apple.com/cn/app/tsuki-adventure/id1436776211" target="_blank" rel="noopener">月兔冒险 (Tsuki Adventure)</a> 这款游戏入迷了。除了很佛系而有意思的玩法、x 冷淡的日系画风外，Tsuki 的背景音乐也是让我入迷的重要原因之一。因此，我尝试从 IPA 文件中提取声音素材文件出来，供自己欣赏使用。</p><p>本文以月兔冒险 App 为例，记录了我从 IPA 文件中提取音频资源文件的方法。</p><p>Disclaimer：我提取素材的目的仅是为了自己欣赏方便，不用每次打开 App，进入对应的关卡。没有任何商业使用的意图或潜在可能。</p><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><ul><li>首先用一些助手软件下载拿到应用的 IPA 文件。用 7zip 打开 ipa，根据可能的文件类型，寻找游戏的素材文件。由于这个游戏没有把资源文件显式放在 ipa 中，因此需要使用其他的方法</li><li>注意到游戏的 <code>Payload\tsuki.app\Data\</code> 目录下有很多 <code>.assets</code> 文件。经过简单的搜索得知，这些素材文件是使用 Unity 开发的游戏的标准素材文件。因此问题转换为，如何从 <code>.assets</code> 文件中提取出声音/图片文件</li><li>使用 <a href="https://github.com/DerPopo/UABE" target="_blank" rel="noopener">Unity Assets Bundle Extractor</a>，打开 <code>.assets</code> 文件</li><li>找到其中资源类别为 <code>AudioClip</code> 的文件。将所有文件选中，点击 <code>Plugins</code>，按提示批量导出，得到 <code>wav</code> 文件</li></ul><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="tsuki_ipa_extract_wav.png" alt="Unity Assets Bundle Extractor" title="">                </div>                <div class="image-caption">Unity Assets Bundle Extractor</div>            </figure><p>Enjoy :)</p><p>P.S Tsuki 这款 App 真的好治愈。。。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;最近对&lt;a href=&quot;https://itunes.apple.com/cn/app/tsuki-adventure/id1436776211&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;月兔冒险 (Tsuki Adventure)&lt;/a&gt; 这款游戏入
+      
+    
+    </summary>
+    
+      <category term="Trick" scheme="https://if2007.github.io/categories/Trick/"/>
+    
+    
+      <category term="Trick" scheme="https://if2007.github.io/tags/Trick/"/>
+    
+  </entry>
   
   <entry>
     <title>一句话解决微博的 &quot;关注作者阅读全文&quot;</title>

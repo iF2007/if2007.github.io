@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+  <link rel="stylesheet" href="/css/style.css">
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="true/2019/01/25/extract_ios_app_assets_from_assets_files/">
+    
+    
+    <title>从 iOS App 的 IPA 文件提取资源 / 素材文件 | Yet Another Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Trick">
+    <meta name="description" content="最近对月兔冒险 (Tsuki Adventure) 这款游戏入迷了。除了很佛系而有意思的玩法、x 冷淡的日系画风外，Tsuki 的背景音乐也是让我入迷的重要原因之一。因此，我尝试从 IPA 文件中提取声音素材文件出来，供自己欣赏使用。 本文以月兔冒险 App 为例，记录了我从 IPA 文件中提取音频资源文件的方法。 Disclaimer：我提取素材的目的仅是为了自己欣赏方便，不用每次打开 App，">
+<meta name="keywords" content="Trick">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从 iOS App 的 IPA 文件提取资源 &#x2F; 素材文件">
+<meta property="og:url" content="https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/index.html">
+<meta property="og:site_name" content="Yet Another Blog">
+<meta property="og:description" content="最近对月兔冒险 (Tsuki Adventure) 这款游戏入迷了。除了很佛系而有意思的玩法、x 冷淡的日系画风外，Tsuki 的背景音乐也是让我入迷的重要原因之一。因此，我尝试从 IPA 文件中提取声音素材文件出来，供自己欣赏使用。 本文以月兔冒险 App 为例，记录了我从 IPA 文件中提取音频资源文件的方法。 Disclaimer：我提取素材的目的仅是为了自己欣赏方便，不用每次打开 App，">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/tsuki_ipa_extract_wav.png">
+<meta property="og:updated_time" content="2019-01-25T12:31:45.409Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从 iOS App 的 IPA 文件提取资源 &#x2F; 素材文件">
+<meta name="twitter:description" content="最近对月兔冒险 (Tsuki Adventure) 这款游戏入迷了。除了很佛系而有意思的玩法、x 冷淡的日系画风外，Tsuki 的背景音乐也是让我入迷的重要原因之一。因此，我尝试从 IPA 文件中提取声音素材文件出来，供自己欣赏使用。 本文以月兔冒险 App 为例，记录了我从 IPA 文件中提取音频资源文件的方法。 Disclaimer：我提取素材的目的仅是为了自己欣赏方便，不用每次打开 App，">
+<meta name="twitter:image" content="https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/tsuki_ipa_extract_wav.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Yet Another Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Xinwei Gao</h5>
+          <a href="mailto:xinwei.gao.7@yandex.com" title="xinwei.gao.7@yandex.com" class="mail">xinwei.gao.7@yandex.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/2018/04/06/nist_pqc/" target="_blank" >
+                <i class="icon icon-lg icon-codepen"></i>
+                NIST 后量子密码标准提案
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/about"  >
+                <i class="icon icon-lg icon-info-circle"></i>
+                About Me
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">从 iOS App 的 IPA 文件提取资源 / 素材文件</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">从 iOS App 的 IPA 文件提取资源 / 素材文件</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-01-24T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2019-01-25
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Trick/">Trick</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#方法"><span class="post-toc-number">1.</span> <span class="post-toc-text">方法</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-extract_ios_app_assets_from_assets_files"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">从 iOS App 的 IPA 文件提取资源 / 素材文件</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-01-25 00:00:00" datetime="2019-01-24T16:00:00.000Z"  itemprop="datePublished">2019-01-25</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Trick/">Trick</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>最近对<a href="https://itunes.apple.com/cn/app/tsuki-adventure/id1436776211" target="_blank" rel="noopener">月兔冒险 (Tsuki Adventure)</a> 这款游戏入迷了。除了很佛系而有意思的玩法、x 冷淡的日系画风外，Tsuki 的背景音乐也是让我入迷的重要原因之一。因此，我尝试从 IPA 文件中提取声音素材文件出来，供自己欣赏使用。</p>
+<p>本文以月兔冒险 App 为例，记录了我从 IPA 文件中提取音频资源文件的方法。</p>
+<p>Disclaimer：我提取素材的目的仅是为了自己欣赏方便，不用每次打开 App，进入对应的关卡。没有任何商业使用的意图或潜在可能。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><ul>
+<li>首先用一些助手软件下载拿到应用的 IPA 文件。用 7zip 打开 ipa，根据可能的文件类型，寻找游戏的素材文件。由于这个游戏没有把资源文件显式放在 ipa 中，因此需要使用其他的方法</li>
+<li>注意到游戏的 <code>Payload\tsuki.app\Data\</code> 目录下有很多 <code>.assets</code> 文件。经过简单的搜索得知，这些素材文件是使用 Unity 开发的游戏的标准素材文件。因此问题转换为，如何从 <code>.assets</code> 文件中提取出声音/图片文件</li>
+<li>使用 <a href="https://github.com/DerPopo/UABE" target="_blank" rel="noopener">Unity Assets Bundle Extractor</a>，打开 <code>.assets</code> 文件</li>
+<li>找到其中资源类别为 <code>AudioClip</code> 的文件。将所有文件选中，点击 <code>Plugins</code>，按提示批量导出，得到 <code>wav</code> 文件</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="tsuki_ipa_extract_wav.png" alt="Unity Assets Bundle Extractor" title="">
+                </div>
+                <div class="image-caption">Unity Assets Bundle Extractor</div>
+            </figure>
+<p>Enjoy :)</p>
+<p>P.S Tsuki 这款 App 真的好治愈。。。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    About this post:<br>
+
+    <ul>
+        <li class="post-copyright-link">
+            <strong>Title: </strong>
+            <a href=>从 iOS App 的 IPA 文件提取资源 / 素材文件</a>
+        </li>
+
+        <li class="post-copyright-link">
+            <strong>URL: </strong>
+            <a href="/2019/01/25/extract_ios_app_assets_from_assets_files/">https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/</a>
+        </li>
+
+        <li class="post-copyright-date">
+            <strong>Last updated: </strong>
+            <time datetime="2019-01-25T12:31:45.409Z" itemprop="dateUpdated">2019-01-25 20:31:45</time>
+        </li>  
+    </ul>
+</span>
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://if2007.github.io">
+            <img src="/img/avatar.jpg" alt="Xinwei Gao">
+            Xinwei Gao
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Trick/">Trick</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/&title=《从 iOS App 的 IPA 文件提取资源 / 素材文件》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/&title=《从 iOS App 的 IPA 文件提取资源 / 素材文件》 — Yet Another Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《从 iOS App 的 IPA 文件提取资源 / 素材文件》 — Yet Another Blog&url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/&via=https://if2007.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/10/31/weibo_article_show_hidden_part/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">一句话解决微博的 &#34;关注作者阅读全文&#34;</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Valine Comments -->
+    <div class="comments vcomment" id="comments"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+    <!-- Valine Comments script -->
+    <script>
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+          return GUEST_INFO.indexOf(item) > -1
+        });
+        new Valine({
+            el: '#comments',
+            notify: 'false' == 'true',
+            verify: 'true' == 'true',
+            appId: "wrCCJaL0YD6S2QfVG0wgG921-gzGzoHsz",
+            appKey: "urnkVpsJxqsqHy1yOWy4ThmH",
+            avatar: "mm",
+            placeholder: "Just go go",
+            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
+            pageSize: "10"
+        })
+    </script>
+    <!-- Valine Comments end -->
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+
+
+<footer class="footer">
+    <div class="bottom">
+        
+
+        <p>
+            <span>Xinwei Gao &copy; 2018 - 2019</span>
+
+            <span>CC-BY-NC 4.0</span>
+
+            <span>
+                
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">Indigo</a>
+            </span>
+
+
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"> <i class="icon icon-lg icon-rss"></i></a></span>
+            
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/&title=《从 iOS App 的 IPA 文件提取资源 / 素材文件》 — Yet Another Blog&pic=https://if2007.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/&title=《从 iOS App 的 IPA 文件提取资源 / 素材文件》 — Yet Another Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《从 iOS App 的 IPA 文件提取资源 / 素材文件》 — Yet Another Blog&url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/&via=https://if2007.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://if2007.github.io/2019/01/25/extract_ios_app_assets_from_assets_files/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwElEQVR42u3c0UpkMRAEUP//p13wSdidmaruxHHh5Eku3jEnQtJWGj8+4vH5Nb5//f1J+52ff432kw8PPDw8vNHUH41k0jnjOeDRu8/n8OKT8fDw8K7x9lt88m6+iMl8osMDDw8P7628trzOlyyB4eHh4f2PvKSEnU0lR+Lh4eH9Hl5S7M4ChTxfnR1Ix7IWPDw8vHmCWmzK7/r6+v0eHh4e3uhWvb3gbwPZNuCoZ4uHh4d3gfdoKs//1M8jgySuzZ8k7QvFhPDw8PBGvLaVqj0q2lJ4E+z+4zkeHh7eNV5+MORRbLvFt8jo+MHDw8O7wMuDg7b4nh0Y7XJE7bN4eHh4R3l56NAiZ1FsG3AUFToeHh7eUd5mKntqnrjWvyo8PDy8a7yPciQber7db9oIXiwxHh4e3jXevvnpRhPAgWgYDw8P7wIvKW3z7bi41I/jhrbUjlqv8PDw8Ba8WXGct2G1080v0op2VTw8PLyjvE0ZPYtZkwJ682l4eHh4t3mnWkXzGDdZpmThonIfDw8P7wIvn/SppqikcJ8dG/UhgYeHh3fmNr/4x8ptE9UMmV+PFQ2seHh4eEd57ebeFsez9qk8RM7jDDw8PLwNb9ZclV9l5Z/cxhnRW3h4eHhHee3L+aT37QIHghI8PDy8a7xknL3+3zQfFAEuHh4e3jVevmXnCzELNfZL/7AzAg8PD+8Qrw0L8sNgf/0/G3Xtj4eHh1fy8g09jxhmTQb72KLIp/Hw8PAO8dptd/MkX7j2uFqdM3h4eHhdRlpcQeWbePLWLLDAw8PDey+vDUnb0rZ9sr9+w8PDw/sZXn4Y5EfChrpZ1hcXYHh4eHg/yMvr1WRybVvAsLzGw8PD+zW8JHpoS+19iX/sYMDDw8Nb3LDnU2kbC5I2rM134uHh4d3jtRdgsx+fNyXMjpNj93t4eHh4z8YfbnR9gjcX5dQAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
